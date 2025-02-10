@@ -1,5 +1,6 @@
 import React from "react";
 import { FaFacebookF, FaGoogle, FaTwitter } from "react-icons/fa"; // Corrected import
+import { Link } from "react-router-dom"; // Import Link for routing
 import MyImage from "../assets/footer.jpg"; // Replace with the path to your image
 
 const Footer = () => {
@@ -18,19 +19,35 @@ const Footer = () => {
           <p className="max-w-md text-white opacity-80 mb-6">
             I'm a passionate web developer creating innovative and responsive web solutions. Let's build something amazing together!
           </p>
-          <a href="#contact" className="text-white hover:text-blue-400 transition duration-300">
+          <Link to="/contact" className="text-white hover:text-blue-400 transition duration-300">
             Contact Me
-          </a>
+          </Link>
         </div>
 
         {/* Company Links */}
         <div className="text-center md:text-left">
           <p className="text-lg font-semibold text-white mb-4">COMPANY</p>
           <ul className="space-y-3 cursor-pointer">
-            <li className="hover:text-blue-400 transition">Home</li>
-            <li className="hover:text-blue-400 transition">About Us</li>
-            <li className="hover:text-blue-400 transition">Delivery</li>
-            <li className="hover:text-blue-400 transition">Privacy Policy</li>
+            <li>
+              <Link to="/" className="hover:text-blue-400 transition">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/projects" className="hover:text-blue-400 transition">
+                Projects
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" className="hover:text-blue-400 transition">
+                About
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="hover:text-blue-400 transition">
+                Contact
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -43,13 +60,13 @@ const Footer = () => {
           </ul>
           {/* Social Media Icons */}
           <div className="flex justify-center md:justify-start gap-6 mt-6">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.facebook.com/zahidnub/" target="_blank" rel="noopener noreferrer">
               <FaFacebookF className="text-2xl hover:text-blue-400 transition duration-300" />
             </a>
             <a href="https://google.com" target="_blank" rel="noopener noreferrer">
               <FaGoogle className="text-2xl hover:text-red-400 transition duration-300" />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://x.com/ZahidHasan634" target="_blank" rel="noopener noreferrer">
               <FaTwitter className="text-2xl hover:text-blue-400 transition duration-300" />
             </a>
           </div>
