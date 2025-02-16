@@ -1,5 +1,6 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion } from "framer-motion"; 
+import { Link } from "react-router-dom";
 import About_img from "../assets/footer.jpg";
 
 const About = () => {
@@ -74,7 +75,7 @@ const About = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Contact Me
+           <Link to='/contact'>Contact me</Link>
           </motion.a>
         </motion.div>
       </div>
