@@ -21,7 +21,7 @@ const SkillsPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-r from-teal-400 to-indigo-600 py-10 flex flex-col items-center">
-      <h2 className="text-5xl font-extrabold text-white mb-12 tracking-wide drop-shadow-lg">My Language Skills</h2>
+      <h2 className="text-5xl font-extrabold text-white mb-12 tracking-wide drop-shadow-lg px-4">My Language Skills</h2>
       <div className="w-full max-w-4xl px-4 grid grid-cols-1 md:grid-cols-2 gap-10">
         {skills.map((skill) => (
           <div

@@ -2,6 +2,35 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const Contact = () => {
+
+  const [result, setResult] = React.useState("");
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    setResult("Sending....");
+    const formData = new FormData(event.target);
+
+    formData.append("access_key", "b10d4188-9bc5-4d97-85ad-4982a938ffab");
+
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      setResult("Form Submitted Successfully");
+      event.target.reset();
+    } else {
+      console.log("Error", data);
+      setResult(data.message);
+      
+    }
+  };
+
+
+
   return (
     <div className="container mx-auto px-6 md:px-12 lg:px-20 py-16 bg-[#0A192F] text-white">
       {/* Hero Section */}
@@ -26,11 +55,12 @@ const Contact = () => {
         transition={{ duration: 0.8 }}
         className="max-w-2xl mx-auto bg-[#112240] p-8 rounded-xl shadow-lg"
       >
-        <form className="space-y-6">
+        <form onSubmit={onSubmit} className="space-y-6">
           <div>
             <label className="block text-gray-300 font-medium">Your Name</label>
             <input
               type="text"
+              name="name"
               placeholder="Enter your name"
               className="w-full px-4 py-3 mt-2 bg-[#0A192F] text-white border border-[#00C9FF] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#92FE9D] transition"
             />
@@ -40,6 +70,7 @@ const Contact = () => {
             <label className="block text-gray-300 font-medium">Your Email</label>
             <input
               type="email"
+              name="email"
               placeholder="Enter your email"
               className="w-full px-4 py-3 mt-2 bg-[#0A192F] text-white border border-[#00C9FF] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#92FE9D] transition"
             />
@@ -49,6 +80,7 @@ const Contact = () => {
             <label className="block text-gray-300 font-medium">Message</label>
             <textarea
               rows="5"
+              name="message"
               placeholder="Write your message..."
               className="w-full px-4 py-3 mt-2 bg-[#0A192F] text-white border border-[#00C9FF] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#92FE9D] transition"
             />
@@ -63,6 +95,7 @@ const Contact = () => {
             Send Message
           </motion.button>
         </form>
+        <span>{result}</span>
       </motion.div>
 
       {/* Contact Info Section */}
