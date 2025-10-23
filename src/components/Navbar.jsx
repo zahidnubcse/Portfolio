@@ -1,111 +1,151 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Moon, Sun } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
-  // Function to toggle mobile menu
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  // Apply theme on mount and when toggled
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
+  // Scroll background effect
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
+
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Projects", path: "/projects" },
+    { name: "About", path: "/about" },
+    { name: "Contact", path: "/contact" },
+  ];
 
   return (
-    <nav className="bg-white shadow-md fixed w-full top-0 z-50 transition-all ease-in-out duration-300">
+    <nav
+      className={`fixed w-full top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "backdrop-blur-md bg-white/70 dark:bg-gray-900/70 shadow-md"
+          : "bg-transparent"
+      }`}
+    >
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Use Link for the logo */}
-        <Link to="/" className="text-xl font-bold text-gray-800 hover:text-blue-500">
-          ZAHID HASAN
+        {/* Logo */}
+        <Link
+          to="/"
+          className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white hover:text-blue-500"
+        >
+          ZAHID <span className="text-blue-500">HASAN</span>
         </Link>
-        
+
         {/* Desktop Menu */}
-        <ul className="hidden md:flex space-x-6">
-          <li>
-            <Link to="/" className="text-gray-800 hover:text-blue-500 transition duration-300">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link to="/projects" className="text-gray-800 hover:text-blue-500 transition duration-300">
-              Projects
-            </Link>
-          </li>
-          <li>
-            <Link to="/about" className="text-gray-800 hover:text-blue-500 transition duration-300">
-              About
-            </Link>
-          </li>
-          <li>
-            <Link to="/contact" className="text-gray-800 hover:text-blue-500 transition duration-300">
-              Contact
-            </Link>
-          </li>
+        <ul className="hidden md:flex space-x-8 text-lg">
+          {navLinks.map((link) => (
+            <li key={link.name}>
+              <Link
+                to={link.path}
+                className={`relative group font-medium ${
+                  location.pathname === link.path
+                    ? "text-blue-500"
+                    : "text-gray-800 dark:text-gray-200"
+                }`}
+              >
+                {link.name}
+                <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full"></span>
+              </Link>
+            </li>
+          ))}
         </ul>
 
-        {/* Mobile Menu Button (Hamburger Icon) */}
-        <button
-          className="md:hidden text-gray-800 focus:outline-none"
-          onClick={toggleMenu}
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
+        {/* Right Controls */}
+        <div className="flex items-center space-x-4">
+          {/* Theme Toggle */}
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+            aria-label="Toggle theme"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h16m-7 6h7"
-            ></path>
-          </svg>
-        </button>
+            {darkMode ? (
+              <Sun className="text-yellow-400" size={20} />
+            ) : (
+              <Moon className="text-gray-700" size={20} />
+            )}
+          </button>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-gray-800 dark:text-gray-200 focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {isOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16m-7 6h7"
+                ></path>
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Menu - Toggle Visibility */}
-      {isOpen && (
-        <div className="md:hidden bg-white shadow-md transition-all ease-in-out duration-300">
-          <ul className="flex flex-col space-y-4 p-4">
-            <li>
+      {/* Mobile Menu */}
+      <div
+        className={`md:hidden bg-white dark:bg-gray-900 transition-all duration-300 overflow-hidden ${
+          isOpen ? "max-h-60" : "max-h-0"
+        }`}
+      >
+        <ul className="flex flex-col items-center py-4 space-y-4">
+          {navLinks.map((link) => (
+            <li key={link.name}>
               <Link
-                to="/"
-                className="text-gray-800 hover:text-blue-500 transition duration-300"
-                onClick={() => setIsOpen(false)}
+                to={link.path}
+                className={`text-lg ${
+                  location.pathname === link.path
+                    ? "text-blue-500"
+                    : "text-gray-800 dark:text-gray-200"
+                } hover:text-blue-500`}
               >
-                Home
+                {link.name}
               </Link>
             </li>
-            <li>
-              <Link
-                to="/projects"
-                className="text-gray-800 hover:text-blue-500 transition duration-300"
-                onClick={() => setIsOpen(false)}
-              >
-                Projects
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/about"
-                className="text-gray-800 hover:text-blue-500 transition duration-300"
-                onClick={() => setIsOpen(false)}
-              >
-                About
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/contact"
-                className="text-gray-800 hover:text-blue-500 transition duration-300"
-                onClick={() => setIsOpen(false)}
-              >
-                Contact
-              </Link>
-            </li>
-          </ul>
-        </div>
-      )}
+          ))}
+        </ul>
+      </div>
     </nav>
   );
 };

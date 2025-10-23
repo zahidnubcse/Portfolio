@@ -1,51 +1,105 @@
-import { FaReact, FaJsSquare, FaHtml5, FaCss3Alt, FaJava, FaCuttlefish, FaGithub } from "react-icons/fa";
+import React from "react";
+import {
+  FaReact,
+  FaJsSquare,
+  FaHtml5,
+  FaCss3Alt,
+  FaJava,
+  FaCuttlefish,
+  FaGithub,
+} from "react-icons/fa";
+import { motion } from "framer-motion";
 
+// Custom Tailwind SVG Icon
 const TailwindSVG = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="currentColor">
-    <path d="M4.5 2.25c-.414 0-.75.336-.75.75v17.25c0 .414.336.75.75.75h15c.414 0 .75-.336.75-.75V3c0-.414-.336-.75-.75-.75h-15zm2.531 2.078h9.938v4.125H7.031V4.328zm0 6.219h9.938v4.125H7.031v-4.125zm0 6.219h9.938v4.125H7.031v-4.125z" />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width="40"
+    height="40"
+    fill="currentColor"
+  >
+    <path d="M12.001 4.8c-3.6 0-5.85 1.8-6.75 5.4 1.35-1.8 2.925-2.475 4.725-2.025 1.026.255 1.758.999 2.55 1.8 1.305 1.314 2.814 2.835 5.475 2.835 3.6 0 5.85-1.8 6.75-5.4-1.35 1.8-2.925 2.475-4.725 2.025-1.026-.255-1.758-.999-2.55-1.8-1.305-1.314-2.814-2.835-5.475-2.835zm-6.75 9c-3.6 0-5.85 1.8-6.75 5.4 1.35-1.8 2.925-2.475 4.725-2.025 1.026.255 1.758.999 2.55 1.8 1.305 1.314 2.814 2.835 5.475 2.835 3.6 0 5.85-1.8 6.75-5.4-1.35 1.8-2.925 2.475-4.725 2.025-1.026-.255-1.758-.999-2.55-1.8-1.305-1.314-2.814-2.835-5.475-2.835z" />
   </svg>
 );
 
 const SkillsPage = () => {
-  // Language skills data
   const skills = [
-    { name: "React", percentage: 75, icon: <FaReact size={40} /> },
-    { name: "JavaScript", percentage: 80, icon: <FaJsSquare size={40} /> },
-    { name: "HTML", percentage: 90, icon: <FaHtml5 size={40} /> },
-    { name: "Tailwind", percentage: 70, icon: <TailwindSVG /> },
-    { name: "CSS", percentage: 85, icon: <FaCss3Alt size={40} /> },
-    { name: "C", percentage: 60, icon: <FaCuttlefish size={40} /> },
-    { name: "C++", percentage: 60, icon: <FaCuttlefish size={40} /> },
-    { name: "Java", percentage: 15, icon: <FaJava size={40} /> },
+    { name: "React", percentage: 85, icon: <FaReact size={40} color="#61DAFB" /> },
+    { name: "JavaScript", percentage: 90, icon: <FaJsSquare size={40} color="#F7DF1E" /> },
+    { name: "HTML", percentage: 95, icon: <FaHtml5 size={40} color="#E34F26" /> },
+    { name: "Tailwind", percentage: 80, icon: <TailwindSVG /> },
+    { name: "CSS", percentage: 88, icon: <FaCss3Alt size={40} color="#2965f1" /> },
+    { name: "C", percentage: 65, icon: <FaCuttlefish size={40} color="#4B5563" /> },
+    { name: "C++", percentage: 70, icon: <FaCuttlefish size={40} color="#3B82F6" /> },
+    { name: "Java", percentage: 60, icon: <FaJava size={40} color="#E51E25" /> },
   ];
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-r from-teal-400 to-indigo-600 py-10 flex flex-col items-center">
-      <h2 className="text-5xl font-extrabold text-white mb-12 tracking-wide drop-shadow-lg px-4">My Language Skills</h2>
-      <div className="w-full max-w-4xl px-4 grid grid-cols-1 md:grid-cols-2 gap-10">
-        {skills.map((skill) => (
-          <div
+    <div className="w-full min-h-screen bg-gradient-to-b from-[#0A192F] to-[#1E3A8A] py-16 flex flex-col items-center text-white">
+      <motion.h2
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        className="text-4xl md:text-5xl font-extrabold mb-12 text-transparent bg-clip-text bg-gradient-to-r from-[#00C9FF] to-[#92FE9D]"
+      >
+        My Technical Skills
+      </motion.h2>
+
+      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-10 px-6">
+        {skills.map((skill, index) => (
+          <motion.div
             key={skill.name}
-            className="p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-500 ease-in-out"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: index * 0.1 }}
+            viewport={{ once: true }}
+            className="relative bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-md hover:shadow-[#00C9FF]/30 hover:-translate-y-2 transition-all duration-300"
           >
-            <div className="flex items-center mb-5">
-              <div className="mr-4 text-indigo-600">{skill.icon}</div>
-              <p className="text-2xl font-semibold text-gray-800 tracking-wide">{skill.name}</p>
+            {/* Floating icon */}
+            <motion.div
+              animate={{ y: [0, -5, 0] }}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              className="flex items-center gap-4 mb-6"
+            >
+              <div className="p-3 bg-gradient-to-br from-[#00C9FF] to-[#92FE9D] rounded-full shadow-lg">
+                {skill.icon}
+              </div>
+              <h3 className="text-2xl font-semibold">{skill.name}</h3>
+            </motion.div>
+
+            {/* Progress bar with animation */}
+            <div className="relative w-full h-3 bg-white/20 rounded-full overflow-hidden mb-3">
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: `${skill.percentage}%` }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+                viewport={{ once: true }}
+                className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-[#00C9FF] to-[#92FE9D] shadow-lg"
+              ></motion.div>
             </div>
-            <div className="relative w-full h-4 bg-gray-200 rounded-full overflow-hidden mb-3">
-              <div
-                className="absolute top-0 left-0 h-full rounded-full"
-                style={{
-                  width: `${skill.percentage}%`,
-                  background: `linear-gradient(90deg, #fbbf24 0%, #9333ea ${skill.percentage}%)`,
-                }}
-              ></div>
-            </div>
-            <p className="text-sm text-gray-600 text-right font-medium">{skill.percentage}%</p>
-          </div>
+
+            <p className="text-sm text-gray-300 text-right font-medium">
+              {skill.percentage}%
+            </p>
+
+            {/* Gradient glow on hover */}
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#00C9FF] to-[#92FE9D] opacity-0 hover:opacity-10 transition duration-500"></div>
+          </motion.div>
         ))}
       </div>
-      <div className="mt-12 text-center text-white font-bold text-xl animate-pulse">Skills that drive my passion!</div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.2, delay: 0.5 }}
+        className="mt-12 text-center text-lg md:text-xl font-semibold text-gray-200"
+      >
+        <span className="bg-gradient-to-r from-[#00C9FF] to-[#92FE9D] text-transparent bg-clip-text">
+          Code. Create. Innovate.
+        </span>{" "}
+        — Skills that power my passion 🚀
+      </motion.div>
     </div>
   );
 };
