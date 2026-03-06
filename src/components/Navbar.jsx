@@ -10,7 +10,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
-  // Apply theme on mount and when toggled
+  // Apply theme
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -21,9 +21,16 @@ const Navbar = () => {
     }
   }, [darkMode]);
 
-  // Scroll background effect
+  // Detect scroll
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -44,15 +51,16 @@ const Navbar = () => {
     <nav
       className={`fixed w-full top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "backdrop-blur-md bg-white/70 dark:bg-gray-900/70 shadow-md"
-          : "bg-transparent"
+          ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg"
+          : "bg-white dark:bg-gray-900"
       }`}
     >
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        
         {/* Logo */}
         <Link
           to="/"
-          className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white hover:text-blue-500"
+          className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white hover:text-blue-500 transition"
         >
           ZAHID <span className="text-blue-500">HASAN</span>
         </Link>
@@ -63,14 +71,16 @@ const Navbar = () => {
             <li key={link.name}>
               <Link
                 to={link.path}
-                className={`relative group font-medium ${
+                className={`relative group font-medium transition ${
                   location.pathname === link.path
                     ? "text-blue-500"
                     : "text-gray-800 dark:text-gray-200"
                 }`}
               >
                 {link.name}
-                <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full"></span>
+
+                {/* underline animation */}
+                <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
               </Link>
             </li>
           ))}
@@ -78,11 +88,11 @@ const Navbar = () => {
 
         {/* Right Controls */}
         <div className="flex items-center space-x-4">
+
           {/* Theme Toggle */}
           <button
             onClick={() => setDarkMode(!darkMode)}
             className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-            aria-label="Toggle theme"
           >
             {darkMode ? (
               <Sun className="text-yellow-400" size={20} />
@@ -93,7 +103,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-gray-800 dark:text-gray-200 focus:outline-none"
+            className="md:hidden text-gray-800 dark:text-gray-200"
             onClick={() => setIsOpen(!isOpen)}
           >
             <svg
@@ -101,7 +111,6 @@ const Navbar = () => {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
             >
               {isOpen ? (
                 <path
@@ -109,14 +118,14 @@ const Navbar = () => {
                   strokeLinejoin="round"
                   strokeWidth="2"
                   d="M6 18L18 6M6 6l12 12"
-                ></path>
+                />
               ) : (
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
                   d="M4 6h16M4 12h16m-7 6h7"
-                ></path>
+                />
               )}
             </svg>
           </button>
@@ -125,16 +134,16 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden bg-white dark:bg-gray-900 transition-all duration-300 overflow-hidden ${
+        className={`md:hidden transition-all duration-300 overflow-hidden ${
           isOpen ? "max-h-60" : "max-h-0"
-        }`}
+        } bg-white dark:bg-gray-900`}
       >
         <ul className="flex flex-col items-center py-4 space-y-4">
           {navLinks.map((link) => (
             <li key={link.name}>
               <Link
                 to={link.path}
-                className={`text-lg ${
+                className={`text-lg transition ${
                   location.pathname === link.path
                     ? "text-blue-500"
                     : "text-gray-800 dark:text-gray-200"
