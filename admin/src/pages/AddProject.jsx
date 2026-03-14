@@ -1,58 +1,87 @@
 import { useState } from "react";
 import axios from "axios";
 
-export default function AddProject(){
+export default function AddProject() {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [link, setLink] = useState("");
+  const [file, setFile] = useState(null); // file input
 
-const [thumbnail,setThumbnail] = useState("");
-const [link,setLink] = useState("");
+  const addProject = async (e) => {
+    e.preventDefault();
 
-const addProject = async(e)=>{
-e.preventDefault();
+    if (!title || !description || !link || !file) {
+      return alert("All fields are required!");
+    }
 
-const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-await axios.post(
-"http://localhost:5000/api/projects/add",
-{thumbnail,link},
-{
-headers:{
-Authorization:`Bearer ${token}`
-}
-}
-);
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("link", link);
+    formData.append("thumbnail", file); // send file, not URL
 
-alert("Project Added");
-}
+    try {
+      await axios.post("http://localhost:5000/api/projects/add", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-return(
+      alert("Project Added Successfully");
 
-<div>
+      setTitle("");
+      setDescription("");
+      setLink("");
+      setFile(null);
+    } catch (err) {
+      console.error(err);
+      alert("Error adding project");
+    }
+  };
 
-<h2 className="text-2xl font-bold mb-4">Add Project</h2>
+  return (
+    <div className="max-w-xl mx-auto bg-white shadow-lg p-6 rounded-lg">
+      <h2 className="text-2xl font-bold mb-6 text-center">
+        Add New Project
+      </h2>
 
-<form onSubmit={addProject} className="space-y-3">
+      <form onSubmit={addProject} className="space-y-4">
+        <input
+          type="text"
+          placeholder="Project Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="border p-2 w-full rounded"
+        />
 
-<input
-type="text"
-placeholder="Thumbnail URL"
-className="border p-2 w-full"
-onChange={(e)=>setThumbnail(e.target.value)}
-/>
+        <textarea
+          placeholder="Project Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="border p-2 w-full rounded"
+        />
 
-<input
-type="text"
-placeholder="Project Link"
-className="border p-2 w-full"
-onChange={(e)=>setLink(e.target.value)}
-/>
+        <input
+          type="text"
+          placeholder="Project Link"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          className="border p-2 w-full rounded"
+        />
 
-<button className="bg-black text-white px-4 py-2">
-Add Project
-</button>
+        <input
+          type="file"
+          onChange={(e) => setFile(e.target.files[0])}
+          className="border p-2 w-full rounded"
+        />
 
-</form>
-
-</div>
-
-)
+        <button className="bg-black cursor-pointer text-white px-4 py-2 w-full rounded hover:bg-gray-800 transition">
+          Add Project
+        </button>
+      </form>
+    </div>
+  );
 }
