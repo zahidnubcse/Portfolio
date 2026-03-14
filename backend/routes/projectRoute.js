@@ -1,19 +1,15 @@
 const express = require("express");
-
-const {
-addProject,
-getProjects,
-deleteProject
-} = require("../controllers/projectController");
-
-const auth = require("../middleware/authMiddleware");
+const { addProject, getProjects, deleteProject } = require("../controllers/projectController");
+const authMiddleware = require("../middleware/authMiddleware");
+const { upload } = require("../middleware/upload");
 
 const router = express.Router();
 
-router.post("/add",auth,addProject);
+// PUBLIC ROUTE
+router.get("/", getProjects);
 
-router.get("/",getProjects);
-
-router.delete("/delete/:id",auth,deleteProject);
+// ADMIN ROUTES
+router.post("/add", authMiddleware, upload.single("thumbnail"), addProject);
+router.delete("/delete/:id", authMiddleware, deleteProject);
 
 module.exports = router;
