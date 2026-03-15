@@ -3,34 +3,31 @@ import axios from "axios";
 
 export default function AllProjects() {
   const [projects, setProjects] = useState([]);
-  const [editing, setEditing] = useState(null); // project being edited
+  const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ title: "", description: "", link: "", file: null });
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const getProjects = async () => {
-    const res = await axios.get("http://localhost:5000/api/projects");
-    setProjects(res.data);
+    try {
+      const res = await axios.get(`${API_URL}/projects`);
+      setProjects(res.data);
+    } catch (err) {
+      console.error("Error fetching projects:", err);
+    }
   };
 
-  useEffect(() => {
-    getProjects();
-  }, []);
+  useEffect(() => { getProjects(); }, []);
 
   const deleteProject = async (id) => {
     const token = localStorage.getItem("token");
-    await axios.delete(`http://localhost:5000/api/projects/delete/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    if (!window.confirm("Are you sure?")) return;
+    await axios.delete(`${API_URL}/projects/delete/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     getProjects();
   };
 
   const startEdit = (project) => {
     setEditing(project);
-    setForm({
-      title: project.title,
-      description: project.description,
-      link: project.link,
-      file: null,
-    });
+    setForm({ title: project.title, description: project.description, link: project.link, file: null });
   };
 
   const cancelEdit = () => {
@@ -47,12 +44,15 @@ export default function AllProjects() {
     formData.append("link", form.link);
     if (form.file) formData.append("thumbnail", form.file);
 
-    await axios.put(`http://localhost:5000/api/projects/update/${editing._id}`, formData, {
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
-    });
-
-    cancelEdit();
-    getProjects();
+    try {
+      await axios.put(`${API_URL}/projects/update/${editing._id}`, formData, {
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
+      });
+      cancelEdit();
+      getProjects();
+    } catch (err) {
+      console.error("Error updating project:", err);
+    }
   };
 
   return (
@@ -67,34 +67,30 @@ export default function AllProjects() {
               type="text"
               placeholder="Title"
               value={form.title}
-              onChange={(e) => setForm({ ...form, title: e.target.value })}
+              onChange={e => setForm({ ...form, title: e.target.value })}
               className="border p-2 w-full rounded"
             />
             <textarea
               placeholder="Description"
               value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              onChange={e => setForm({ ...form, description: e.target.value })}
               className="border p-2 w-full rounded"
             />
             <input
               type="text"
               placeholder="Project Link"
               value={form.link}
-              onChange={(e) => setForm({ ...form, link: e.target.value })}
+              onChange={e => setForm({ ...form, link: e.target.value })}
               className="border p-2 w-full rounded"
             />
             <input
               type="file"
-              onChange={(e) => setForm({ ...form, file: e.target.files[0] })}
+              onChange={e => setForm({ ...form, file: e.target.files[0] })}
               className="border p-2 w-full rounded"
             />
             <div className="flex space-x-2 mt-2">
-              <button type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">
-                Save
-              </button>
-              <button type="button" onClick={cancelEdit} className="bg-gray-500 text-white px-3 py-1 rounded">
-                Cancel
-              </button>
+              <button type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">Save</button>
+              <button type="button" onClick={cancelEdit} className="bg-gray-500 text-white px-3 py-1 rounded">Cancel</button>
             </div>
           </form>
         </div>
@@ -109,19 +105,16 @@ export default function AllProjects() {
           </tr>
         </thead>
         <tbody>
-          {projects.map((p) => (
+          {projects.map(p => (
             <tr key={p._id} className="border">
               <td className="p-2">
-                <img src={p.thumbnail} className="w-20" />
+                {/* Use Cloudinary URL directly */}
+                <img src={p.thumbnail} alt={p.title} className="w-20 h-20 object-cover rounded"/>
               </td>
               <td className="p-2">{p.link}</td>
               <td className="p-2 space-x-2">
-                <button onClick={() => startEdit(p)} className="bg-blue-500 cursor-pointer text-white px-3 py-1 rounded">
-                  Edit
-                </button>
-                <button onClick={() => deleteProject(p._id)} className="bg-red-500 cursor-pointer text-white px-3 py-1 rounded">
-                  Delete
-                </button>
+                <button onClick={() => startEdit(p)} className="bg-blue-500 text-white px-3 py-1 rounded">Edit</button>
+                <button onClick={() => deleteProject(p._id)} className="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
               </td>
             </tr>
           ))}
