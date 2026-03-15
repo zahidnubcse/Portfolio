@@ -9,22 +9,24 @@ const adminRoute = require("./routes/adminRoute");
 const app = express();
 
 /* MIDDLEWARE */
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:5173", "http://localhost:5174"], // frontend + admin
+  credentials: true
+}));
 app.use(express.json());
+app.use("/uploads", express.static("uploads")); // serve uploaded images
 
 /* DATABASE CONNECTION */
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected Successfully"))
-  .catch((err) => console.log("MongoDB Connection Error:", err));
+  .catch(err => console.log("MongoDB Connection Error:", err));
 
 /* ROUTES */
 app.use("/api/projects", projectRoute);
 app.use("/api/admin", adminRoute);
 
 /* DEFAULT ROUTE */
-app.get("/", (req, res) => {
-  res.send("API Running...");
-});
+app.get("/", (req, res) => res.send("API Running..."));
 
 /* SERVER */
 const PORT = process.env.PORT || 5000;
