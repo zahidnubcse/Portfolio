@@ -17,7 +17,7 @@ const Footer = () => {
             className="w-32 h-32 rounded-full mb-6 shadow-lg border-2 border-purple-500/30"
           />
 
-          <p className="text-xl font-bold text-white mb-4">Hi, I'm Zahid!</p>
+          <p className="text-xl font-bold text-white mb-4">Hi, I'm Zahid Hasan!</p>
 
           <p className="max-w-md text-gray-300 mb-6">
             I'm a passionate web developer creating innovative and responsive
