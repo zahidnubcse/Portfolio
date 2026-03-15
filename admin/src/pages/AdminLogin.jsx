@@ -51,7 +51,7 @@ export default function AdminLogin() {
           required
         />
 
-        <button className="bg-black text-white w-full py-2 rounded hover:bg-gray-800 transition">
+        <button className="cursor-pointer bg-black text-white w-full py-2 rounded hover:bg-gray-800 transition">
           Login
         </button>
       </form>

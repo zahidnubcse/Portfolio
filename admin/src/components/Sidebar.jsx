@@ -1,26 +1,56 @@
 import { Link } from "react-router-dom";
 
-export default function Sidebar(){
+export default function Sidebar({ open, setOpen }) {
 
-return(
+  return (
+    <>
+      {/* Overlay (mobile) */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/40 md:hidden"
+          onClick={() => setOpen(false)}
+        ></div>
+      )}
 
-<div className="w-60 h-screen bg-gray-900 text-white p-5">
+      <aside
+        className={`fixed md:sticky top-0 left-0 h-screen w-60 bg-gray-900 text-white p-5 z-50
+        transform ${open ? "translate-x-0" : "-translate-x-full"}
+        md:translate-x-0 transition-transform duration-300`}
+      >
 
-<h2 className="text-xl font-bold mb-6">Dashboard</h2>
+        {/* Close button */}
+        <button
+          onClick={() => setOpen(false)}
+          className="md:hidden text-xl mb-6"
+        >
+          ✕
+        </button>
 
-<ul className="space-y-4">
+        <h2 className="text-xl font-bold mb-6">Dashboard</h2>
 
-<li>
-<Link to="/admin/add">Add Project</Link>
-</li>
+        <ul className="space-y-4">
 
-<li>
-<Link to="/admin/projects">All Projects</Link>
-</li>
+          <li>
+            <Link
+              to="/admin/add"
+              className="block hover:text-gray-300"
+            >
+              Add Project
+            </Link>
+          </li>
 
-</ul>
+          <li>
+            <Link
+              to="/admin/projects"
+              className="block hover:text-gray-300"
+            >
+              All Projects
+            </Link>
+          </li>
 
-</div>
+        </ul>
 
-)
+      </aside>
+    </>
+  );
 }
