@@ -26,7 +26,7 @@ export default function Navbar({ setOpen }) {
 
       <button
         onClick={logout}
-        className="bg-red-500 text-white px-3 md:px-4 py-1 rounded hover:bg-red-600 transition"
+        className="bg-red-500 text-white px-3 md:px-4 py-1 rounded hover:bg-red-700 transition"
       >
         Logout
       </button>
